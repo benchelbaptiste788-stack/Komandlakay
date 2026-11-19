@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kòmand Pwodwi</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  color: #222;
+}
+
+header {
+  background: #101828;
+  color: white;
+  padding: 28px 18px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0 0 10px;
+}
+
+header p {
+  color: #d0d5dd;
+}
+
+.container {
+  max-width: 650px;
+  margin: 25px auto;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 15px;
+  box-shadow: 0 3px 15px rgba(0,0,0,.06);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 13px;
+  margin-top: 8px;
+  border: 1px solid #d0d5dd;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+button {
+  width: 100%;
+  margin-top: 22px;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #1677ff;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.payment {
+  background: #f0f7ff;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.payment p {
+  margin: 10px 0;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #777;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Kòmand Pwodwi</h1>
+  <p>Chwazi pwodwi ou vle achte a</p>
+</header>
+
+<div class="container">
+<div class="card">
+
+<h2>Fòm Kòmand</h2>
+
+<form id="orderForm">
+
+<label>Non ak siyati</label>
+<input type="text" id="name" required>
+
+<label>Nimewo WhatsApp</label>
+<input type="tel" id="phone" required>
+
+<label>Kalite kòmand</label>
+<select id="type" required>
+  <option value="">Chwazi</option>
+  <option>Pwodwi nan katalòg</option>
+  <option>Pwodwi sou SHEIN</option>
+  <option>Pwodwi sou Temu</option>
+  <option>Pwodwi sou Amazon</option>
+  <option>Pwodwi sou lòt sit</option>
+</select>
+
+<label>Non pwodwi</label>
+<input type="text" id="product" required>
+
+<label>Lyen pwodwi a (URL)</label>
+<input type="url" id="link" placeholder="Kole lyen pwodwi a">
+
+<label>Koulè</label>
+<input type="text" id="color">
+
+<label>Gwosè</label>
+<input type="text" id="size" placeholder="S, M, L, XL...">
+
+<label>Kantite</label>
+<input type="number" id="quantity" min="1" value="1" required>
+
+<label>Pri total kòmand lan (USD)</label>
+<input type="number" id="price" min="0" step="0.01" required>
+
+<div class="payment">
+  <h3>Plan Peman</h3>
+  <p>Total kòmand: <strong id="total">$0.00</strong></p>
+  <p>70% Acompte: <strong id="deposit">$0.00</strong></p>
+  <p>30% Balans: <strong id="balance">$0.00</strong></p>
+</div>
+
+<label>Adrès / Zòn livrezon</label>
+<input type="text" id="address" required>
+
+<label>Nòt espesyal</label>
+<textarea id="notes" rows="3"></textarea>
+
+<button type="submit">Voye Kòmand mwen</button>
+
+</form>
+</div>
+</div>
+
+<footer>
+  Kòmand ou se yon demann. Achte a ap konfime apre verifikasyon.
+</footer>
+
+<script>
+const price = document.getElementById("price");
+const total = document.getElementById("total");
+const deposit = document.getElementById("deposit");
+const balance = document.getElementById("balance");
+
+function calculate() {
+  const amount = Number(price.value) || 0;
+
+  total.textContent = amount.toFixed(2) + " USD";
+  deposit.textContent = (amount * 0.70).toFixed(2) + " USD";
+  balance.textContent = (amount * 0.30).toFixed(2) + " USD";
+}
+
+price.addEventListener("input", calculate);
+
+document.getElementById("orderForm")
+.addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const order = {
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    type: document.getElementById("type").value,
+    product: document.getElementById("product").value,
+    link: document.getElementById("link").value,
+    color: document.getElementById("color").value,
+    size: document.getElementById("size").value,
+    quantity: document.getElementById("quantity").value,
+    total: price.value,
+    deposit: (Number(price.value) * 0.70).toFixed(2),
+    balance: (Number(price.value) * 0.30).toFixed(2),
+    address: document.getElementById("address").value,
+    notes: document.getElementById("notes").value
+  };
+
+  const message =
+    "NOUVO KÒMAND\n\n" +
+    "Non: " + order.name + "\n" +
+    "WhatsApp: " + order.phone + "\n" +
+    "Kategori: " + order.type + "\n" +
+    "Pwodwi: " + order.product + "\n" +
+    "Lyen: " + order.link + "\n" +
+    "Koulè: " + order.color + "\n" +
+    "Gwosè: " + order.size + "\n" +
+    "Kantite: " + order.quantity + "\n" +
+    "Total: $" + order.total + "\n" +
+    "70% Acompte: $" + order.deposit + "\n" +
+    "30% Balans: $" + order.balance + "\n" +
+    "Adrès: " + order.address + "\n" +
+    "Nòt: " + order.notes;
+
+  const whatsapp = "https://wa.me/?text=" +
+    encodeURIComponent(message);
+
+  window.open(whatsapp, "_blank");
+});
+</script>
+
+</body>
+</html>
